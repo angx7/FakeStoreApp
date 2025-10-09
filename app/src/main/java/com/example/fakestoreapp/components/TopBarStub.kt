@@ -32,6 +32,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import com.example.fakestoreapp.ui.theme.AccentOrange
+import com.example.fakestoreapp.ui.theme.AccountColor
 
 
 @Composable
@@ -47,16 +49,13 @@ fun TopBarStub(
             .padding(top = 4.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Icono redondo a la izquierda (tienda)
         Box(
             modifier = Modifier
                 .size(36.dp)
                 .clip(CircleShape)
-                .background(Color(0xFFFF7A00)), // naranja del mock
+                .background(AccentOrange),
             contentAlignment = Alignment.Center
         ) {
-            // Si no tienes Storefront, deja ShoppingCart
-
             Icon(
                 imageVector = Icons.Default.ShoppingCart,
                 contentDescription = null,
@@ -75,7 +74,7 @@ fun TopBarStub(
             },
             modifier = Modifier
                 .weight(1f)
-                .height(50.dp), // alto compacto para estilo pill
+                .height(50.dp),
             singleLine = true,
             placeholder = { Text("Search") },
             leadingIcon = {
@@ -97,7 +96,6 @@ fun TopBarStub(
 
         Spacer(Modifier.width(8.dp))
 
-        // Icono de filtro a la derecha
         Box(
             modifier = Modifier
                 .size(32.dp)
@@ -107,8 +105,8 @@ fun TopBarStub(
         ) {
             Icon(
                 imageVector = Icons.Outlined.AccountCircle, // o Icons.Outlined.FilterList
-                contentDescription = "Filter",
-                tint = Color(0xFF262626)
+                contentDescription = "Account",
+                tint = AccountColor
             )
         }
     }

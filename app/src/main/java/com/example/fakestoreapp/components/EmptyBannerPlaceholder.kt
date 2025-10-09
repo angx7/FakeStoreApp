@@ -10,8 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.fakestoreapp.ui.theme.BannerPlaceholder
+import com.example.fakestoreapp.ui.theme.TextGray
 
 @Composable
 fun EmptyBannerPLaceholder() {
@@ -20,9 +21,9 @@ fun EmptyBannerPLaceholder() {
             .fillMaxWidth()
             .height(160.dp)
             .clip(RoundedCornerShape(20.dp))
-            .background(Color(0xFFE7EAF2)),
+            .background(BannerPlaceholder),
         contentAlignment = Alignment.Center
     ) {
-        Text("Sin productos", color = Color(0xFF6B6B6B))
+        Text("Sin productos", color = TextGray)
     }
 }

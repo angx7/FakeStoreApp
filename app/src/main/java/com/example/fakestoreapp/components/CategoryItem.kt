@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.fakestoreapp.ui.theme.CardGray
 
 @Composable
 fun CategoryItem(label: String, onClick: () -> Unit) {
@@ -27,7 +28,7 @@ fun CategoryItem(label: String, onClick: () -> Unit) {
         modifier = Modifier
             .width(100.dp)
             .clip(RoundedCornerShape(18.dp))
-            .background(Color(0xFFF5F5F7))
+            .background(CardGray)
             .clickable { onClick() }
             .padding(vertical = 14.dp),
         horizontalAlignment = Alignment.CenterHorizontally
