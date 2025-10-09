@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.fakestoreapp.models.Product
-import com.example.fakestoreapp.screens.RatingStars
 import com.example.fakestoreapp.ui.theme.DarkBlue
 
 @Composable
