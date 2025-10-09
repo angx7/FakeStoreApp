@@ -52,7 +52,7 @@ fun FakeStoreAppTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = MerriweatherTypography,
         content = content
     )
 }
