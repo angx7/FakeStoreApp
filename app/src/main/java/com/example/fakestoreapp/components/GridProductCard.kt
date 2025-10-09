@@ -34,7 +34,7 @@ fun GridProductCard(product: Product, onClick: () -> Unit) {
         AsyncImage(
             model = product.image,
             contentDescription = product.title,
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.Inside,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(130.dp)
