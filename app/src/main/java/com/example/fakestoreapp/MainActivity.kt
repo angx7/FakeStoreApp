@@ -28,12 +28,13 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController = navController, startDestination = HomeScreenRoute) {
                         composable <HomeScreenRoute>{
                             HomeScreen(
-                                navController = navController
+                                navController = navController,
+                                paddingValues = innerPadding
                             )
                         }
                         composable<ProductDetailScreenRoute> { backEntry ->
                             val args = backEntry.toRoute<ProductDetailScreenRoute>()
-                            ProductDetailScreen(args.id)
+                            ProductDetailScreen(args.id, innerPadding)
                         }
                     }
                 }

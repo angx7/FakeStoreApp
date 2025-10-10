@@ -3,30 +3,25 @@ package com.example.fakestoreapp.screens
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.example.fakestoreapp.components.ActionButtons
+import com.example.fakestoreapp.components.DescriptionBox
+import com.example.fakestoreapp.components.PriceAndRating
 import com.example.fakestoreapp.models.Product
 import com.example.fakestoreapp.services.ProductService
-import com.example.fakestoreapp.ui.theme.* // << importa tus colores
+import com.example.fakestoreapp.ui.theme.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.math.floor
 
 @Composable
 fun ProductDetailScreen(id: Int, paddingValues: PaddingValues = PaddingValues()) {
@@ -76,7 +71,7 @@ fun ProductDetailScreen(id: Int, paddingValues: PaddingValues = PaddingValues())
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .background(CardGray) // fondo general
+                    .background(CardGray)
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
@@ -109,115 +104,20 @@ fun ProductDetailScreen(id: Int, paddingValues: PaddingValues = PaddingValues())
                     color = AccountColor
                 )
 
-                Row (
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-                    // --- Precio ---
-                    Text(
-                        text = "$${"%.2f".format(p.price)}",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = DarkBlue
-                    )
-
-                    RatingStars(
-                        rating = p.rating?.rate?.toDouble() ?: 0.0,
-                        count   = p.rating?.count ?: 0
-                    )
-                }
+                // --- Precio y Rating ---
+                PriceAndRating(p)
 
                 Spacer(Modifier.height(8.dp))
 
-
-                val scrollState = rememberScrollState()
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(max = 300.dp)
-                        .verticalScroll(scrollState)
-                ) {
-                    Text(
-                        text = p.description,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
+                DescriptionBox(p)
 
                 Spacer(Modifier.weight(1f))
 
                 // --- Botones ---
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Button(
-                        onClick = { /* TODO: acción comprar */ },
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(48.dp),
-                        shape = RoundedCornerShape(14.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = DarkBlue) // primario
-                    ) {
-                        Text("ORDER NOW", color = PureWhite, fontWeight = FontWeight.SemiBold)
-                    }
-
-                    OutlinedButton(
-                        onClick = {  },
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(48.dp),
-                        shape = RoundedCornerShape(14.dp),
-                        border = ButtonDefaults.outlinedButtonBorder(true),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = DarkBlue) // texto/borde
-                    ) {
-                        Text("Add To Wishlist", color = DarkBlue)
-                    }
-                }
+                ActionButtons()
             }
         }
     }
 }
 
-/* ----------------- Auxiliares ----------------- */
 
-
-@Composable
-fun RatingStars(
-    rating: Double,
-    count: Int,
-    max: Int = 5,
-    filledColor: Color = AccentOrange,
-    emptyColor: Color = AccountColor,
-    textColor: Color = TextGray,
-    halfThreshold: Double = 0.5,
-    emptyThreshold: Double = 0.4
-) {
-    val clamped = rating.coerceIn(0.0, max.toDouble())
-    val baseFull = kotlin.math.floor(clamped).toInt().coerceIn(0, max)
-    val frac = clamped - baseFull
-
-    var extraFull = 0
-    var half = 0
-    if (baseFull < max) {
-        when {
-            frac > halfThreshold -> half = 1
-            frac < emptyThreshold -> {  }
-            else -> extraFull = 1
-        }
-    }
-
-    val full = (baseFull + extraFull).coerceAtMost(max)
-    val empty = (max - full - half).coerceAtLeast(0)
-
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        repeat(full) { Icon(imageVector = Star, contentDescription = null, tint = filledColor) }
-        repeat(half) { Icon(imageVector = Star_half, contentDescription = null, tint = filledColor) }
-        repeat(empty) { Icon(imageVector = Star, contentDescription = null, tint = emptyColor.copy(alpha = 0.45f)) }
-
-        Spacer(Modifier.width(8.dp))
-        Text(text = "${"%.1f".format(rating)} ($count)", color = textColor)
-    }
-}
