@@ -112,7 +112,7 @@ Aplicación Android escrita en **Kotlin + Jetpack Compose** que consume la **Fak
 
 1) Clona el repo y abre en **Android Studio**:
 ```bash
-git clone https://github.com/<tu-usuario>/FakeStoreApp.git
+git clone [https://github.com/<tu-usuario>/FakeStoreApp.git](https://github.com/angx7/FakeStoreApp.git)
 cd FakeStoreApp
 ```
 
