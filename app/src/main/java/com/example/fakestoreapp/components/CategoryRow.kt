@@ -18,8 +18,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.fakestoreapp.ui.theme.* // DarkBlue, AccentOrange, CardGray, PureWhite, AccountColor, etc.
-import androidx.compose.material.icons.Icons
+import com.example.fakestoreapp.ui.theme.*
 import com.example.fakestoreapp.ui.theme.Memory as ElectronicsIcon
 import com.example.fakestoreapp.ui.theme.Category as CategoryIcon
 import com.example.fakestoreapp.ui.theme.Diamond as JewelryIcon
@@ -46,10 +45,10 @@ fun CategoryRow(
 }
 
 private data class CategoryUi(
-    val key: String,       // valor original ("electronics", ...)
-    val label: String,     // etiqueta mostrada
-    val icon: ImageVector, // ImageVector para el icono
-    val tint: Color        // color del icono
+    val key: String,
+    val label: String,
+    val icon: ImageVector,
+    val tint: Color
 )
 
 @Composable

@@ -104,7 +104,7 @@ fun TopBarStub(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = Icons.Outlined.AccountCircle, // o Icons.Outlined.FilterList
+                imageVector = Icons.Outlined.AccountCircle,
                 contentDescription = "Account",
                 tint = AccountColor
             )

@@ -19,7 +19,6 @@ fun PriceAndRating(p: Product){
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ){
-        // --- Precio ---
         Text(
             text = "$${"%.2f".format(p.price)}",
             style = MaterialTheme.typography.titleMedium,
