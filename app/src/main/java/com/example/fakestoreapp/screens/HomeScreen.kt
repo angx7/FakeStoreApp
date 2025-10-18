@@ -1,16 +1,18 @@
 package com.example.fakestoreapp.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.fakestoreapp.components.CategoryRow
 import com.example.fakestoreapp.components.EmptyBannerPLaceholder
@@ -18,49 +20,35 @@ import com.example.fakestoreapp.components.GridProductCard
 import com.example.fakestoreapp.components.HotSaleBanner
 import com.example.fakestoreapp.components.SectionHeader
 import com.example.fakestoreapp.components.TopBarStub
-import com.example.fakestoreapp.models.Product
-import com.example.fakestoreapp.services.ProductService
+import com.example.fakestoreapp.designpattern.HomeViewModel
 import com.example.fakestoreapp.ui.theme.ProductDetailScreenRoute
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 @Composable
 fun HomeScreen(navController: NavController, paddingValues: PaddingValues) {
-    var productos by remember { mutableStateOf(listOf<Product>()) }
-    var isLoading by remember { mutableStateOf(true) }
-    var error by remember { mutableStateOf<String?>(null) }
+    val viewModel: HomeViewModel = viewModel()
 
+    // Cargar una sola vez al entrar
     LaunchedEffect(Unit) {
-        try {
-            val retrofit = Retrofit.Builder()
-                .baseUrl("https://fakestoreapi.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-            val service = retrofit.create(ProductService::class.java)
-            val result = withContext(Dispatchers.IO) { service.getAllProducts() }
-            productos = result
-            isLoading = false
-        } catch (e: Exception) {
-            Log.e("HomeScreen", "Error: ${e.message}")
-            error = e.message
-            isLoading = false
-        }
+        viewModel.loadProducts()
     }
 
     when {
-        isLoading -> {
+        viewModel.isLoading -> {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         }
-        error != null -> {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Ocurrió un error: $error")
+        viewModel.error != null -> {
+            Box(Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Ocurrió un error: ${viewModel.error}")
             }
         }
         else -> {
+            val productos = viewModel.products
             val first = productos.firstOrNull()
             val rest = if (productos.size > 1) productos.drop(1) else emptyList()
             val categories = listOf("electronics", "jewelery", "men's clothing", "women's clothing")
@@ -75,9 +63,9 @@ fun HomeScreen(navController: NavController, paddingValues: PaddingValues) {
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
             ) {
-
                 item(span = { GridItemSpan(2) }) { TopBarStub() }
 
+                // Hot sales
                 item(span = { GridItemSpan(2) }) {
                     SectionHeader(title = "Hot Sales", action = "see more")
                 }
@@ -99,16 +87,16 @@ fun HomeScreen(navController: NavController, paddingValues: PaddingValues) {
                 item(span = { GridItemSpan(2) }) {
                     CategoryRow(
                         categories = categories,
-                        onCategoryClick = {  }
+                        onCategoryClick = { /* TODO: filtrar por categoría si quieres */ }
                     )
                 }
 
+                // Grid de productos
                 if (rest.isNotEmpty()) {
                     item(span = { GridItemSpan(2) }) {
                         SectionHeader(title = "Recently Viewed", action = "see more")
                     }
-
-                    items(rest) { p ->
+                    items(rest, key = { it.id }) { p ->
                         GridProductCard(
                             product = p,
                             onClick = { navController.navigate(ProductDetailScreenRoute(p.id)) }
